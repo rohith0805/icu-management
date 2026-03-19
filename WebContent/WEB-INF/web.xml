@@ -1,0 +1,62 @@
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <filter>
+        <filter-name>corsFilter</filter-name>
+        <filter-class>com.icu.filter.CorsFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>corsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>com.icu.servlet.AuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/api/auth/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>com.icu.servlet.PatientServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/api/patients</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>HospitalServlet</servlet-name>
+        <servlet-class>com.icu.servlet.HospitalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HospitalServlet</servlet-name>
+        <url-pattern>/api/hospitals</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BedServlet</servlet-name>
+        <servlet-class>com.icu.servlet.BedServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BedServlet</servlet-name>
+        <url-pattern>/api/beds</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AlertServlet</servlet-name>
+        <servlet-class>com.icu.servlet.AlertServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AlertServlet</servlet-name>
+        <url-pattern>/api/alerts</url-pattern>
+    </servlet-mapping>
+
+</web-app>
