@@ -1,18 +1,14 @@
 function PatientCard({ patient }) {
   return (
-    <div className="patient-card">
-      <div className="patient-avatar">❤</div>
-      <div className="patient-info">
+    <div className="patient-mini-card">
+      <div className="patient-avatar">♡</div>
+      <div className="patient-main">
         <h4>{patient.name}</h4>
         <p>{patient.diagnosis}</p>
       </div>
-      <div className="patient-vitals">
-        <span>{patient.heartRate} bpm</span>
-      </div>
-      <div>
-        <span className={`status-badge ${patient.status?.toLowerCase()}`}>
-          {patient.status}
-        </span>
+      <div className="patient-bpm">{patient.heartRate} bpm</div>
+      <div className={`status-pill ${patient.status?.toLowerCase()}`}>
+        {patient.status}
       </div>
     </div>
   );

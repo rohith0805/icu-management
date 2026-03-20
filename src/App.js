@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
@@ -10,7 +9,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import "./App.css";
 
-function Layout() {
+function ProtectedLayout() {
   return (
     <div className="app-layout">
       <Sidebar />
@@ -29,21 +28,16 @@ function Layout() {
 }
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
+  const isLoggedIn = !!localStorage.getItem("token");
 
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={isLoggedIn ? <Navigate to="/" replace /> : <Login />} />
+        <Route path="/signup" element={isLoggedIn ? <Navigate to="/" replace /> : <Signup />} />
         <Route
           path="/*"
-          element={isLoggedIn ? <Layout /> : <Navigate to="/login" replace />}
+          element={isLoggedIn ? <ProtectedLayout /> : <Navigate to="/login" replace />}
         />
       </Routes>
     </Router>

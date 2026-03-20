@@ -5,67 +5,52 @@ import { getHospitals } from "../services/api";
 
 function Beds() {
   const [hospitals, setHospitals] = useState([]);
-  const [filterHospital, setFilterHospital] = useState("All Hospitals");
-
-  const loadHospitals = async () => {
-    try {
-      const res = await getHospitals();
-      setHospitals(res.data || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [selectedHospital, setSelectedHospital] = useState("All Hospitals");
 
   useEffect(() => {
+    const loadHospitals = async () => {
+      const res = await getHospitals();
+      setHospitals(res.data);
+    };
     loadHospitals();
   }, []);
 
-  const filtered =
-    filterHospital === "All Hospitals"
+  const filteredHospitals =
+    selectedHospital === "All Hospitals"
       ? hospitals
-      : hospitals.filter((h) => h.name === filterHospital);
+      : hospitals.filter((hospital) => hospital.name === selectedHospital);
 
-  const totalAvailable = hospitals.reduce((sum, h) => sum + (h.availableBeds || 0), 0);
-  const totalBeds = hospitals.reduce((sum, h) => sum + (h.totalBeds || 0), 0);
-  const occupied = totalBeds - totalAvailable;
+  const totalAvailable = hospitals.reduce((sum, h) => sum + h.availableBeds, 0);
+  const totalOccupied = hospitals.reduce((sum, h) => sum + (h.totalBeds - h.availableBeds), 0);
 
   return (
-    <>
-      <Navbar title="Bed Management" />
+    <div className="page">
+      <Navbar
+        title="Bed Management"
+        subtitle={`${totalAvailable} available · ${totalOccupied} occupied · 3 maintenance`}
+      />
 
-      <div className="page-section">
-        <div className="page-header-row">
-          <div>
-            <h1>Bed Management</h1>
-            <p className="page-subtitle">
-              {totalAvailable} available · {occupied} occupied
-            </p>
-          </div>
-
-          <select
-            className="hospital-filter"
-            value={filterHospital}
-            onChange={(e) => setFilterHospital(e.target.value)}
-          >
-            <option>All Hospitals</option>
-            {hospitals.map((hospital) => (
-              <option key={hospital._id?.$oid || hospital._id || hospital.name}>
-                {hospital.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="beds-grid">
-          {filtered.map((hospital) => (
-            <BedCard
-              key={hospital._id?.$oid || hospital._id || hospital.name}
-              hospital={hospital}
-            />
+      <div className="beds-header">
+        <select
+          className="filter-select beds-select"
+          value={selectedHospital}
+          onChange={(e) => setSelectedHospital(e.target.value)}
+        >
+          <option>All Hospitals</option>
+          {hospitals.map((hospital) => (
+            <option key={hospital._id} value={hospital.name}>
+              {hospital.name}
+            </option>
           ))}
-        </div>
+        </select>
       </div>
-    </>
+
+      <div className="beds-grid">
+        {filteredHospitals.map((hospital) => (
+          <BedCard key={hospital._id} hospital={hospital} />
+        ))}
+      </div>
+    </div>
   );
 }
 
